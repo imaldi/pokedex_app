@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.aim2u.pokedexapp.ui.composable.navigation.AppNavigation
 import com.aim2u.pokedexapp.ui.composable.screen.HomePage
 import com.aim2u.pokedexapp.ui.composable.widget.PokemonDetailScreen
 import com.aim2u.pokedexapp.ui.composable.widget.PokemonListScreen
@@ -25,38 +26,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            var navigateToMain by remember { mutableStateOf(false) }
-            val navController = rememberNavController()
-
-
             PokedexAppTheme {
-                val viewModel: PokemonViewModel = viewModel()
-                NavHost(navController = navController, startDestination = "pokemonList") {
-                    composable("pokemonList") {
-                        PokemonListScreen(
-                            viewModel = viewModel,
-                            navigateToDetail = { pokemonName ->
-                                navController.navigate("pokemonDetail/$pokemonName")
-                            }
-                        )
-                    }
-                    composable(
-                        "pokemonDetail/{pokemonName}",
-                        arguments = listOf(navArgument("pokemonName") { type = NavType.StringType })
-                    ) { backStackEntry ->
-                        val pokemonName = backStackEntry.arguments?.getString("pokemonName")
-                        if (pokemonName != null) {
-                            PokemonDetailScreen(pokemonName = pokemonName)
-                        }
-                    }
-                }
-//                if (navigateToMain) {
-//                    HomePage("Aldi")
-//                } else {
-//                    SplashScreen(
-//                        navigateToMain = { navigateToMain = true }
-//                    )
-//                }
+                AppNavigation()
             }
         }
 

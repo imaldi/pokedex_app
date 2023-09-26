@@ -39,7 +39,7 @@ fun AppNavigation() {
         ) { backStackEntry ->
             val pokemonName = backStackEntry.arguments?.getString("pokemonName")
             if (pokemonName != null) {
-                PokemonDetailScreen(pokemonName = pokemonName)
+                PokemonDetailScreen(viewModel = viewModel)
             }
         }
     }
