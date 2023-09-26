@@ -1,5 +1,6 @@
 package com.aim2u.pokedexapp.ui.state_holder
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
@@ -11,6 +12,7 @@ class PokemonViewModel : ViewModel() {
 
     val pokemonList: LiveData<List<Result>> = liveData {
         val response = apiService.getPokemonList()
+        Log.d("pokemon response","$response")
         emit(response.results)
     }
 }
