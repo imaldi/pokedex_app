@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -70,13 +72,19 @@ fun PokemonListItem(pokemon: Result, onItemClick: () -> Unit) {
 fun PokemonDetailScreen(
     viewModel: PokemonViewModel) {
     val pokemonDetail by viewModel.pokemonDetail.collectAsState(null)
-    val scrollState = rememberScrollState()
+    val abilities = (pokemonDetail?.abilities?.map { it.ability.name } ?: emptyList()).toList()
     Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
-        Column(modifier = Modifier
-            .verticalScroll(state = scrollState)) {
-//            Text(text = pokemonDetail?.sprites?.frontDefault ?: "Kosong")
-            LoadNetworkImage(url = pokemonDetail?.sprites?.frontDefault ?: "No Image")
-            Text(text = pokemonDetail.toString())
+        LazyColumn{
+            item {
+                LoadNetworkImage(url = pokemonDetail?.sprites?.frontDefault ?: "No Image",modifier = Modifier.height(32.dp).width(32.dp))
+            }
+            item {
+                Text(text = pokemonDetail?.name ?: "No Name")
+
+            }
+            items(items = abilities) { ability ->
+                Text("$ability")
+            }
         }
     }
 }
