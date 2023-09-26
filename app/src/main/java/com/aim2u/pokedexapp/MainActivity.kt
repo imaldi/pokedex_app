@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.aim2u.pokedexapp.ui.composable.screen.HomePage
 import com.aim2u.pokedexapp.ui.theme.PokedexAppTheme
 import com.aim2u.pokemonapp.ui.composable.screen.SplashScreen
 
@@ -26,13 +27,13 @@ class MainActivity : ComponentActivity() {
             var navigateToMain by remember { mutableStateOf(false) }
 
             PokedexAppTheme {
-//                if (navigateToMain) {
-//                    Greeting("Aldi")
-//                } else {
-                SplashScreen(
-                    navigateToMain = { navigateToMain = true }
-                )
-//                }
+                if (navigateToMain) {
+                    HomePage("Aldi")
+                } else {
+                    SplashScreen(
+                        navigateToMain = { navigateToMain = true }
+                    )
+                }
             }
         }
 
@@ -42,24 +43,3 @@ class MainActivity : ComponentActivity() {
 
 
 
-@Composable
-fun MainScreen() {
-    // Your main screen content here
-}
-
-@Composable
-fun Greeting(name: String,) {
-    Surface(color = MaterialTheme.colorScheme.primary) {
-        Text(
-            text = "Hello $name!", modifier = Modifier.padding(24.dp)
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PokedexAppTheme {
-        Greeting("Android")
-    }
-}
