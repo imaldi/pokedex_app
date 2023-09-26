@@ -2,6 +2,10 @@ package com.aim2u.pokedexapp.data.network
 
 import com.aim2u.pokedexapp.data.model.Pokemon
 import com.aim2u.pokedexapp.data.model.PokemonModel
+import com.aim2u.pokedexapp.utils.SnakeCaseTypeAdapter
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -16,9 +20,13 @@ interface ApiService {
 
     companion object {
         fun create(): ApiService {
+            val gson: Gson = GsonBuilder()
+                .setFieldNamingPolicy(com.google.gson.FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .create()
             val retrofit = Retrofit.Builder()
                 .baseUrl("https://pokeapi.co/api/v2/")
-                .addConverterFactory(GsonConverterFactory.create())
+//                .client(OkHttpClient())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
 
             return retrofit.create(ApiService::class.java)

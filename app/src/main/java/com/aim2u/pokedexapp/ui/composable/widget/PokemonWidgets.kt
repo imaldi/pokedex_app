@@ -3,12 +3,15 @@ package com.aim2u.pokedexapp.ui.composable.widget
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -67,8 +70,14 @@ fun PokemonListItem(pokemon: Result, onItemClick: () -> Unit) {
 fun PokemonDetailScreen(
     viewModel: PokemonViewModel) {
     val pokemonDetail by viewModel.pokemonDetail.collectAsState(null)
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Text(text = pokemonDetail.toString())
+    val scrollState = rememberScrollState()
+    Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
+        Column(modifier = Modifier
+            .verticalScroll(state = scrollState)) {
+//            Text(text = pokemonDetail?.sprites?.frontDefault ?: "Kosong")
+            LoadNetworkImage(url = pokemonDetail?.sprites?.frontDefault ?: "No Image")
+            Text(text = pokemonDetail.toString())
+        }
     }
 }
 

@@ -21,7 +21,6 @@ fun LoadNetworkImage(
             ImageRequest.Builder // Placeholder image while loading
         // Image to display on error
             (LocalContext.current).data(data = url).apply(block = fun ImageRequest.Builder.() {
-            // You can customize image loading options here if needed
             placeholder(R.drawable.pokeball) // Placeholder image while loading
             error(R.drawable.pokeball) // Image to display on error
         }).build()
