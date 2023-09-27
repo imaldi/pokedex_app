@@ -28,21 +28,35 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aim2u.pokedexapp.ui.state_holder.PokemonViewModel
 import com.aim2u.pokedexapp.data.model.Result
+import com.aim2u.pokedexapp.utils.ConnectivityUtil
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PokemonListScreen(viewModel: PokemonViewModel, navigateToDetail: (String) -> Unit) {
+    var context = LocalContext.current
+
+    lateinit var selectedData: List<Result>
     val pokemonList by viewModel.pokemonList.observeAsState(emptyList())
+    val pokemonListDB by viewModel.allPokemon.observeAsState(emptyList())
+    if (ConnectivityUtil.isOnline(context)) {
+        selectedData = pokemonList
+    } else {
+        selectedData = pokemonListDB.mapIndexed { index, pokemonEntity ->
+            Result(name = pokemonEntity.name, url = pokemonEntity.imageUrl) // Adjust this as per your entity structure
+        }
+    }
+
     val searchText = remember { mutableStateOf("") }
     val isAscending = remember { mutableStateOf(true) }
-    val filteredPokemonList = filterAndSortPokemonList(pokemonList, searchText.value, isAscending.value)
+    val filteredPokemonList = filterAndSortPokemonList(selectedData, searchText.value, isAscending.value)
 
     Box(modifier = Modifier.padding(16.dp)) {
         LazyColumn {

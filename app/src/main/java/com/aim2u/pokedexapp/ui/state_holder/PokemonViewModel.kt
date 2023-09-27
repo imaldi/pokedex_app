@@ -37,6 +37,17 @@ class PokemonViewModel : ViewModel() {
         pokemonRepository = PokemonRepository(pokemonDao)
 
         allPokemon = pokemonRepository.allPokemon
+//            Transformations.map(pokemonRepository.allPokemon) { pokemonEntities ->
+//                // Map each PokemonEntity to a Result
+//                pokemonEntities.mapIndexed { index, pokemonEntity ->
+//                    Result(name = pokemonEntity.name, url = pokemonEntity.url) // Adjust this as per your entity structure
+//                }
+
+
+
+//            .value.mapIndexed { index, result ->
+//            PokemonEntity(index, result.name, result.url)
+//        }
     }
 
     val pokemonList: LiveData<List<Result>> = liveData {
