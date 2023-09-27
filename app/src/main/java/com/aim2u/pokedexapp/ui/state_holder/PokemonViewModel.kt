@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class PokemonViewModel(application: Application) : AndroidViewModel(application) {
+class PokemonViewModel : ViewModel() {
     private val apiService = ApiService.create()
     // Create a MutableState to hold the Pokemon detail
     private val _pokemonDetail = MutableStateFlow<PokemonModel?>(null)
@@ -32,9 +32,7 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
     val allPokemon: LiveData<List<PokemonEntity>> // LiveData in ViewModel
 
     init {
-        val app = getApplication<PokedexApplication>()
-
-        val database = app.database
+        val database = PokedexApplication.getInstance().database
         val pokemonDao = database.pokemonDao()
         pokemonRepository = PokemonRepository(pokemonDao)
 

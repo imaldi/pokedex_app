@@ -1,6 +1,8 @@
 package com.aim2u.pokedexapp.ui.composable.navigation
 
+import android.app.Application
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost

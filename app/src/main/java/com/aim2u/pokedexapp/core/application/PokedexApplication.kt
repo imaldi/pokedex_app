@@ -9,6 +9,18 @@ class PokedexApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        // Set the application instance
+        instance = this
+
         PokemonDatabase.initializeDatabase(this)
+    }
+
+    companion object {
+        private lateinit var instance: PokedexApplication
+
+        // Provide a way to access the application instance
+        fun getInstance(): PokedexApplication {
+            return instance
+        }
     }
 }

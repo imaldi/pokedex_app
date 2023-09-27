@@ -2,7 +2,6 @@ package com.aim2u.pokedexapp.data.network
 
 import com.aim2u.pokedexapp.data.model.Pokemon
 import com.aim2u.pokedexapp.data.model.PokemonModel
-import com.aim2u.pokedexapp.utils.SnakeCaseTypeAdapter
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient

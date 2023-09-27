@@ -17,7 +17,7 @@ abstract class PokemonDatabase : RoomDatabase() {
             INSTANCE = Room.databaseBuilder(
                 context.applicationContext,
                 PokemonDatabase::class.java,
-                "your_database_name"
+                "pokemon_database"
             ).build()
         }
 
@@ -26,7 +26,7 @@ abstract class PokemonDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     PokemonDatabase::class.java,
-                    "your_database_name"
+                    "pokemon_database"
                 ).build()
                 INSTANCE = instance
                 instance
