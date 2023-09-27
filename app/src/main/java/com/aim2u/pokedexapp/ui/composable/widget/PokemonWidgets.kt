@@ -14,9 +14,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
@@ -31,22 +35,80 @@ import androidx.compose.ui.unit.sp
 import com.aim2u.pokedexapp.ui.state_holder.PokemonViewModel
 import com.aim2u.pokedexapp.data.model.Result
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PokemonListScreen(viewModel: PokemonViewModel, navigateToDetail: (String) -> Unit) {
     val pokemonList by viewModel.pokemonList.observeAsState(emptyList())
+    val searchText = remember { mutableStateOf("") }
+    val isAscending = remember { mutableStateOf(true) }
+    val filteredPokemonList = filterAndSortPokemonList(pokemonList, searchText.value, isAscending.value)
 
-    LazyColumn {
-        items(items = pokemonList) { pokemon ->
-            PokemonListItem(
-                pokemon = pokemon,
-                onItemClick = {
-                    viewModel.fetchPokemonByName(pokemon.name)
-                    navigateToDetail(pokemon.name) }
-            )
+    Box(modifier = Modifier.padding(16.dp)) {
+        LazyColumn {
+            item {
+                // FIXME cek kenapa perlu opt in / experimental nanti
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    value = searchText.value,
+                    onValueChange = { newQuery ->
+                        searchText.value = newQuery
+                    },
+                    placeholder = {
+                        Text(text = "Search Pokemon")
+                    }
+                )
+            }
+
+            item {
+                Box {
+                    Button(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(end = 16.dp, bottom = 16.dp),
+                        onClick = {
+                            isAscending.value = !isAscending.value
+                        }
+                    ) {
+                        Text(text = if (isAscending.value) "Sort A-Z" else "Sort Z-A")
+                    }
+                }
+            }
+            items(items = filteredPokemonList) { pokemon ->
+                PokemonListItem(
+                    pokemon = pokemon,
+                    onItemClick = {
+                        viewModel.fetchPokemonByName(pokemon.name)
+                        navigateToDetail(pokemon.name)
+                    }
+                )
+            }
         }
     }
 }
+private fun filterAndSortPokemonList(
+    pokemonList: List<Result>,
+    searchQuery: String,
+    isAscending: Boolean
+): List<Result> {
+    // Filter the list based on the search query
+    val filteredList = if (searchQuery.isNotBlank()) {
+        pokemonList.filter { it.name.contains(searchQuery, ignoreCase = true) }
+    } else {
+        pokemonList
+    }
 
+    // Sort the filtered list
+    val sortedList = if (isAscending) {
+        filteredList.sortedBy { it.name }
+    } else {
+        filteredList.sortedByDescending { it.name }
+    }
+
+    return sortedList
+}
 @Composable
 fun PokemonListItem(pokemon: Result, onItemClick: () -> Unit) {
     Surface(
@@ -78,7 +140,9 @@ fun PokemonDetailScreen(
     viewModel: PokemonViewModel) {
     val pokemonDetail by viewModel.pokemonDetail.collectAsState(null)
     val abilities = (pokemonDetail?.abilities?.map { it.ability.name } ?: emptyList()).toList()
-    Surface(modifier = Modifier.fillMaxSize().padding(16.dp), color = Color.White) {
+    Surface(modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp), color = Color.White) {
         LazyColumn{
             item {
                 Text(text = pokemonDetail?.name?.capitalize(Locale.current) ?: "No Name", style = MaterialTheme.typography.headlineMedium)
