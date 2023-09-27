@@ -16,6 +16,7 @@ import com.aim2u.pokemonapp.ui.composable.screen.SplashScreen
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
+    //todo use "application" here
     val viewModel: PokemonViewModel = viewModel()
     var navigateToMain by remember { mutableStateOf(false) }
     NavHost(navController = navController, startDestination = "splash") {
